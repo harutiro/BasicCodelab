@@ -26,16 +26,46 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MyApp(names: List<String> = listOf("World", "Compose")) {
-    Column(
-        modifier = Modifier.padding(vertical = 4.dp)
-    ) {
+fun MyApp() {
+
+    var shouldShowOnboarding by remember { mutableStateOf(true) }
+
+    if (shouldShowOnboarding) {
+        OnboardingScreen(onContinueClicked = { shouldShowOnboarding = false })
+    } else {
+        Greetings()
+    }
+}
+
+@Composable
+fun OnboardingScreen(onContinueClicked: () -> Unit) {
+
+    Surface {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text("Welcome to the Basics Codelab!")
+            Button(
+                modifier = Modifier
+                    .padding(vertical = 24.dp),
+                onClick = onContinueClicked
+            ) {
+                Text("Continue")
+            }
+        }
+    }
+}
+
+@Composable
+private fun Greetings(names: List<String> = listOf("World", "Compose")) {
+    Column(modifier = Modifier.padding(vertical = 4.dp)) {
         for (name in names) {
             Greeting(name = name)
         }
     }
 }
-
 @Composable
 fun Greeting(name: String) {
     val expanded = remember { mutableStateOf(false) }
@@ -73,32 +103,32 @@ fun DefaultPreview() {
     }
 }
 
-@Composable
-fun OnboardingScreen() {
-    // TODO: This state should be hoisted
-    var shouldShowOnboarding by remember { mutableStateOf(true) }
-
-    Surface {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text("Welcome to the Basics Codelab!")
-            Button(
-                modifier = Modifier.padding(vertical = 24.dp),
-                onClick = { shouldShowOnboarding = false }
-            ) {
-                Text("Continue")
-            }
-        }
-    }
-}
+//@Composable
+//fun OnboardingScreen() {
+//    // TODO: This state should be hoisted
+//    var shouldShowOnboarding by remember { mutableStateOf(true) }
+//
+//    Surface {
+//        Column(
+//            modifier = Modifier.fillMaxSize(),
+//            verticalArrangement = Arrangement.Center,
+//            horizontalAlignment = Alignment.CenterHorizontally
+//        ) {
+//            Text("Welcome to the Basics Codelab!")
+//            Button(
+//                modifier = Modifier.padding(vertical = 24.dp),
+//                onClick = { shouldShowOnboarding = false }
+//            ) {
+//                Text("Continue")
+//            }
+//        }
+//    }
+//}
 
 @Preview(showBackground = true, widthDp = 320, heightDp = 320)
 @Composable
 fun OnboardingPreview() {
     BasicCodelabTheme {
-        OnboardingScreen()
+        OnboardingScreen(onContinueClicked = {})
     }
 }
