@@ -60,6 +60,7 @@ fun OnboardingScreen(onContinueClicked: () -> Unit) {
     Surface {
         Column(
             modifier = Modifier.fillMaxSize(),
+            //横と縦を中身に合わせる。
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -77,6 +78,8 @@ fun OnboardingScreen(onContinueClicked: () -> Unit) {
 
 @Composable
 private fun Greetings(names: List<String> = List(1000) { "$it" } ) {
+    //リスト表示をするときに用いる。
+    //androidx.compose.foundation.lazy.itemsをインポートする
     LazyColumn(modifier = Modifier.padding(vertical = 4.dp)) {
         items(items = names) { name ->
             Greeting(name = name)
@@ -87,6 +90,7 @@ private fun Greetings(names: List<String> = List(1000) { "$it" } ) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun Greeting(name: String) {
+    //カードビュー
     Card(
         modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
     ) {
@@ -96,18 +100,28 @@ private fun Greeting(name: String) {
 
 @Composable
 private fun CardContent(name: String) {
+
+    //中身が変更されたときに、それに対応したコンポーザブルを際表示してくれる。便利
     var expanded by remember { mutableStateOf(false) }
+
+    //ぬるっと動くアニメーション
+//    val extraPadding by animateDpAsState(
+//        if (expanded.value) 48.dp else 0.dp
+//    )
 
     Row(
         modifier = Modifier
             .padding(12.dp)
             .animateContentSize(
+                //ここでアニメーションをしてくれる。
+                //中身の大きさによってアニメーションの仕方が変わる。
+                //中身を無くせば、ぬるっとアニメーションする。
                 animationSpec = spring(
                     dampingRatio = Spring.DampingRatioMediumBouncy,
                     stiffness = Spring.StiffnessLow
                 )
             )
-    ) {
+    ){
         Column(
             modifier = Modifier
                 .weight(1f)
@@ -116,12 +130,14 @@ private fun CardContent(name: String) {
             Text(text = "Hello, ")
             Text(
                 text = name,
+                //文字の大きさと太さを設定
                 style = MaterialTheme.typography.displaySmall.copy(
                     fontWeight = FontWeight.ExtraBold
                 )
             )
             if (expanded) {
                 Text(
+                    //同じ文字を四回表示してくれる。
                     text = ("Composem ipsum color sit lazy, " +
                             "padding theme elit, sed do bouncy. ").repeat(4),
                 )
@@ -129,6 +145,7 @@ private fun CardContent(name: String) {
         }
         IconButton(onClick = { expanded = !expanded }) {
             Icon(
+                //画像を表示してくれる。
                 imageVector = if (expanded) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore,
                 contentDescription = if (expanded) {
                     stringResource(R.string.show_less)
