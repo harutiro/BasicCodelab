@@ -31,6 +31,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MyApp() {
 
+    //画面回転をしてもその状態を保持してくれる。
     var shouldShowOnboarding by rememberSaveable { mutableStateOf(true) }
 
     if (shouldShowOnboarding) {
